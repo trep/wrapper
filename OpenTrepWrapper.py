@@ -4,8 +4,8 @@
 '''
 This module is an OpenTrep binding.
 
-    >>> otp = OpenTrepLib(DEFAULT_DB, DEFAULT_LOG)
-    >>> otp.search('sna francsico los angeles', DEFAULT_FMT)
+    >>> with OpenTrepLib(DEFAULT_DB, DEFAULT_LOG) as otp:
+    ...     otp.search('sna francsico los angeles', DEFAULT_FMT)
     ([(3.93..., 'SFO'), (46.28..., 'LAX')], '')
 
 '''
@@ -40,6 +40,7 @@ class OpenTrepLib(object):
     >>> otp = OpenTrepLib(DEFAULT_DB, DEFAULT_LOG)
     >>> otp.search('sna francsico los angeles', DEFAULT_FMT)
     ([(3.93..., 'SFO'), (46.28..., 'LAX')], '')
+    >>> otp.finalize()
     '''
 
     def __init__(self, xapianDBPath, logFilePath):
