@@ -15,3 +15,7 @@ This module is an OpenTrep binding::
     ...     otp.search('sna francsico los angeles', DEFAULT_FMT)
     ([(3.93..., 'SFO'), (46.28..., 'LAX')], '')
 
+You may put the package created by setuptools in the repository with::
+
+    % scp dist/OpenTrepWrapper-*.tar.gz ori-data@nceorilnx04:/remote/oridata/www/pythonpackages
+
