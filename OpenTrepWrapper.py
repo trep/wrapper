@@ -320,26 +320,16 @@ def main_trep(searchString,
               outputFormat=DEFAULT_FMT,
               xapianDBPath=DEFAULT_DB,
               logFilePath=DEFAULT_LOG,
-              from_keys=None,
-              verbose=True):
+              verbose=False):
     '''
     Instanciate the OpenTrepLib object and search from it.
+
+    >>> main_trep('sna francisco')
+    ([(31.5192, 'SFO')], '')
     '''
     with OpenTrepLib(xapianDBPath, logFilePath) as otp:
 
-        r = otp.search(searchString, outputFormat, verbose)
-
-        if outputFormat == 'S':
-            # Only this outputFormat is handled by upper layers
-            if from_keys is None:
-                return r[0]
-            else:
-                from_keys = set(from_keys)
-                return [(k, e) for k, e in r[0] if e in from_keys]
-
-        # For all other formats we return an empty
-        # list to avoid failures
-        return []
+        return otp.search(searchString, outputFormat, verbose)
 
 
 

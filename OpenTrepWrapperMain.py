@@ -70,7 +70,6 @@ def main():
               outputFormat=args['format'],
               xapianDBPath=args['xapiandb'],
               logFilePath=args['log'],
-              from_keys=None,
               verbose=not(args['quiet']))
 
 
