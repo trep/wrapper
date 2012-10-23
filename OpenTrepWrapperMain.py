@@ -11,6 +11,9 @@ from OpenTrepWrapper import DEFAULT_LOG, DEFAULT_FMT, DEFAULT_DB
 
 
 def main():
+    '''
+    Main function.
+    '''
 
     import argparse
 
@@ -64,11 +67,11 @@ def main():
         exit()
 
     main_trep(searchString=' '.join(args['keys']),
-                    outputFormat=args['format'],
-                    xapianDBPath=args['xapiandb'],
-                    logFilePath=args['log'],
-                    from_keys=None,
-                    verbose=not(args['quiet']))
+              outputFormat=args['format'],
+              xapianDBPath=args['xapiandb'],
+              logFilePath=args['log'],
+              from_keys=None,
+              verbose=not(args['quiet']))
 
 
 

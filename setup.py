@@ -6,7 +6,7 @@ from setuptools import setup
 
 setup(
     name = 'OpenTrepWrapper',
-    version = '0.2',
+    version = '0.3',
     author = 'Alex Prengere',
     author_email = 'alex.prengere@amadeus.com',
     url = "http://gitorious.orinet.nce.amadeus.net/ipt/opentrepwrapper",

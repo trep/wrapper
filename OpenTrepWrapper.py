@@ -4,8 +4,8 @@
 '''
 This module is an OpenTrep binding.
 
-    >>> with OpenTrepLib(DEFAULT_DB, DEFAULT_LOG) as otp:
-    ...     otp.search('sna francsico los angeles', DEFAULT_FMT)
+    >>> with OpenTrepLib() as otp:
+    ...     otp.search('sna francsico los angeles')
     ([(3.93..., 'SFO'), (46.28..., 'LAX')], '')
 
 '''
@@ -17,6 +17,7 @@ import simplejson as json
 import sys
 
 try:
+    # For 64 bits system, if not in site-packages
     sys.path.append ('/usr/lib64')
 
     # Initialise the OpenTrep C++ library
@@ -43,7 +44,7 @@ class OpenTrepLib(object):
     >>> otp.finalize()
     '''
 
-    def __init__(self, xapianDBPath, logFilePath):
+    def __init__(self, xapianDBPath=DEFAULT_DB, logFilePath=DEFAULT_LOG):
 
         self._trep_lib = libpyopentrep.OpenTrepSearcher()
 
@@ -66,7 +67,7 @@ class OpenTrepLib(object):
         return self
 
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type_, value, traceback):
         '''On de-indent inside with statement.
         '''
         self.finalize()
@@ -103,7 +104,7 @@ class OpenTrepLib(object):
 
 
 
-    def search(self, searchString, outputFormat, verbose=False):
+    def search(self, searchString, outputFormat=DEFAULT_FMT, verbose=False):
         '''Search.
 
         If no search string was supplied as arguments of the command-line,
@@ -306,7 +307,9 @@ def jsonResultParser(resultString):
 
 
 def index_trep(xapianDBPath=DEFAULT_DB, logFilePath=DEFAULT_LOG, verbose=True):
-
+    '''
+    Instanciate the OpenTrepLib object and index.
+    '''
     with OpenTrepLib(xapianDBPath, logFilePath) as otp:
 
         otp.index(verbose)
@@ -319,7 +322,9 @@ def main_trep(searchString,
               logFilePath=DEFAULT_LOG,
               from_keys=None,
               verbose=True):
-
+    '''
+    Instanciate the OpenTrepLib object and search from it.
+    '''
     with OpenTrepLib(xapianDBPath, logFilePath) as otp:
 
         r = otp.search(searchString, outputFormat, verbose)
@@ -339,7 +344,9 @@ def main_trep(searchString,
 
 
 def _test():
-
+    '''
+    Launching doctests.
+    '''
     import doctest
 
     opt = doctest.ELLIPSIS
