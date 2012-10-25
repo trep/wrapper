@@ -6,8 +6,7 @@ This module is an OpenTrep binding.
 
     >>> with OpenTrepLib() as otp:
     ...     otp.search('sna francsico los angeles')
-    ([(3.93..., 'SFO'), (46.28..., 'LAX')], '')
-
+    ([(0.039..., 'SFO'), (0.462..., 'LAX')], '')
 '''
 
 
@@ -40,7 +39,7 @@ class OpenTrepLib(object):
 
     >>> otp = OpenTrepLib(DEFAULT_DB, DEFAULT_LOG)
     >>> otp.search('sna francsico los angeles', DEFAULT_FMT)
-    ([(3.93..., 'SFO'), (46.28..., 'LAX')], '')
+    ([(0.039..., 'SFO'), (0.462..., 'LAX')], '')
     >>> otp.finalize()
     '''
 
@@ -179,11 +178,11 @@ def compactResultParser(resultString):
 
     >>> test_1 = 'nce/100,sfo/100-emb/98-jcc/97,yvr/100-cxh/83-xea/83-ydt/83;niznayou'
     >>> compactResultParser(test_1)
-    ([(100.0, 'NCE'), (100.0, 'SFO'), (100.0, 'YVR')], 'niznayou')
+    ([(1.0, 'NCE'), (1.0, 'SFO'), (1.0, 'YVR')], 'niznayou')
 
     >>> test_2 = 'aur:avf:bae:bou:chr:cmf:cqf:csf:cvf:dij/100'
     >>> compactResultParser(test_2)
-    ([(100.0, 'AUR')], '')
+    ([(1.0, 'AUR')], '')
 
     >>> test_3 = ';eeee'
     >>> compactResultParser(test_3)
@@ -210,7 +209,7 @@ def compactResultParser(resultString):
 
             for code in extra_loc.split(':'):
 
-                codes.append((float(score), code.upper()))
+                codes.append((float(score) / 100.0, code.upper()))
 
                 # We break because we only want to first
                 break
@@ -325,7 +324,7 @@ def main_trep(searchString,
     Instanciate the OpenTrepLib object and search from it.
 
     >>> main_trep('sna francisco')
-    ([(31.5192, 'SFO')], '')
+    ([(0.315..., 'SFO')], '')
     '''
     with OpenTrepLib(xapianDBPath, logFilePath) as otp:
 

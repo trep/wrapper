@@ -13,7 +13,7 @@ This module is an OpenTrep binding::
 
     >>> with OpenTrepLib() as otp:
     ...     otp.search('sna francsico los angeles')
-    ([(3.93..., 'SFO'), (46.28..., 'LAX')], '')
+    ([(0.039..., 'SFO'), (0.462..., 'LAX')], '')
 
 You may put the package created by setuptools in the repository with::
 
