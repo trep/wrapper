@@ -20,9 +20,6 @@ setup(
         'OpenTrepWrapper',
         'OpenTrepWrapperMain'
     ],
-    #dependency_links = [
-    #    'http://orinet/pythonpackages'
-    #],
     install_requires = [
         #Public
         'simplejson',
