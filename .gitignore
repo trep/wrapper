@@ -6,10 +6,10 @@ build
 dist
 *.egg-info/
 *.pid
-*.swp
+*.sw[po]
 # Ignoring virtualenv
-/test/
 bin/
 lib/
+lib64
 include/
 *.log
