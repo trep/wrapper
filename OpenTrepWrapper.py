@@ -32,6 +32,9 @@ DEFAULT_DB  = '/tmp/opentrep/traveldb'
 DEFAULT_FMT = 'S'
 DEFAULT_LOG = '/dev/null'
 
+AVAILABLE_FORMATS = set(['I', 'J', 'F', 'S'])
+
+
 
 class OpenTrepLib(object):
     '''
@@ -119,6 +122,10 @@ class OpenTrepLib(object):
         works
         '''
 
+        if outputFormat not in AVAILABLE_FORMATS:
+            raise ValueError('outputFormat "%s" invalid, not in %s.' % \
+                             (outputFormat, AVAILABLE_FORMATS))
+
         opentrepOutputFormat = outputFormat
 
         if opentrepOutputFormat == 'I':
@@ -146,9 +153,6 @@ class OpenTrepLib(object):
         # copied/pasted by clients to the OpenTREP library.
         elif outputFormat == 'I':
             fmt_result = jsonResultParser(result)
-
-        else:
-            raise ValueError('outputFormat invalid.')
 
         if verbose:
             print ' -> Raw result: %s' % result
