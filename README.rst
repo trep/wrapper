@@ -17,5 +17,5 @@ This module is an OpenTrep binding::
 
 You may put the package created by setuptools in the repository with::
 
-    % scp dist/OpenTrepWrapper-*.tar.gz ori-data@nceorilnx04:/remote/oridata/www/pythonpackages
+    % rake
 
