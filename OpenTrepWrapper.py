@@ -12,7 +12,7 @@ This module is an OpenTrep binding.
 
 from __future__ import with_statement
 
-import simplejson as json
+import json
 import sys
 
 try:
@@ -83,8 +83,8 @@ class OpenTrepLib(object):
         filePathList = self._trep_lib.getPaths().split(';')
 
         # Report the results
-        print "ORI-maintained list of POR (points of reference): '%s'" % filePathList[0]
-        print "Xapian-based travel database/index: '%s'" % filePathList[1]
+        print("ORI-maintained list of POR (points of reference): '%s'" % filePathList[0])
+        print("Xapian-based travel database/index: '%s'" % filePathList[1])
 
 
     def index(self, verbose=False):
@@ -93,16 +93,16 @@ class OpenTrepLib(object):
         '''
 
         if verbose:
-            print "Perform the indexation of the (Xapian-based) travel database."
-            print "That operation may take several minutes on some slow machines."
-            print "It takes less than 20 seconds on fast ones..."
+            print("Perform the indexation of the (Xapian-based) travel database.")
+            print("That operation may take several minutes on some slow machines.")
+            print("It takes less than 20 seconds on fast ones...")
 
         # Calls the underlying OpenTrep library service
         result = self._trep_lib.index()
 
         if verbose:
             # Report the results
-            print "Done. Indexed %s POR (points of reference)" % result
+            print("Done. Indexed %s POR (points of reference)" % result)
 
 
 
@@ -155,8 +155,8 @@ class OpenTrepLib(object):
             fmt_result = jsonResultParser(result)
 
         if verbose:
-            print ' -> Raw result: %s' % result
-            print ' -> Fmt result: %s' % str(fmt_result)
+            print(' -> Raw result: %s' % result)
+            print(' -> Fmt result: %s' % str(fmt_result))
 
         return fmt_result
 
