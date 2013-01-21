@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+'''
+Main installation script.
+'''
 
 from setuptools import setup
 
@@ -22,6 +25,6 @@ setup(
     ],
     install_requires = [
         #Public
-        'simplejson',
+        #'simplejson', # --> json now
     ],
 )
