@@ -305,8 +305,8 @@ def jsonResultParser(resultString):
     ...                 "page_rank": "64.70"
     ...             }]
     ... }"""
-    >>> jsonResultParser(res)
-    'ORY-LFPO-2988500-23.53%-PAR-48.73-2.36; CDG-LFPG-6269554-64.70%-PAR-49.01-2.55'
+    >>> print(jsonResultParser(res))
+    ORY-LFPO-2988500-23.53%-PAR-48.73-2.36; CDG-LFPG-6269554-64.70%-PAR-49.01-2.55
     '''
 
     return '; '.join(
