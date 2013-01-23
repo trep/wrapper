@@ -1,5 +1,5 @@
 #
 # For Jenkins, main test file and where to put package created
-# 
+#
 test_file : 'test.py'
-repo_url  : 'http://oridist.orinet.nce.amadeus.net/python/'
+repo_url  :
