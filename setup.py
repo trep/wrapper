@@ -11,8 +11,8 @@ setup(
     name = 'OpenTrepWrapper',
     version = '0.7',
     author = 'Alex Prengere',
-    author_email = 'alex.prengere@amadeus.com',
-    url = "http://gitorious.orinet.nce.amadeus.net/ipt/opentrepwrapper",
+    author_email = 'alex.prengere@gmail.com',
+    url = 'https://github.com/trep/wrapper',
     description = 'A Python wrapper module for OpenTrep.',
     entry_points = {
         'console_scripts' : [
