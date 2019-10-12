@@ -14,7 +14,7 @@ def main():
     s = unittest.TestSuite()
 
     s.addTests(doctest.DocTestSuite(OpenTrepWrapper, optionflags=opt))
-    s.addTests(doctest.DocFileSuite('README.rst', optionflags=opt))
+    s.addTests(doctest.DocFileSuite('README.md', optionflags=opt))
 
     return s
 

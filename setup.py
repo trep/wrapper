@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 '''
@@ -27,4 +27,5 @@ setup(
         #Public
         #'simplejson', # --> json now
     ],
+    #sanitize_lib = ['-lasan'] if cc == 'gcc' and not is_macos else [],
 )

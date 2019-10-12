@@ -21,15 +21,15 @@ try:
     sys.path.append ('/usr/lib64')
 
     # Initialise the OpenTrep C++ library
-    import libpyopentrep
+    import pyopentrep
 
 except ImportError:
-    # libpyopentrep could not be found
-    raise ImportError("*libpyopentrep* raised ImportError.")
+    # pyopentrep could not be found
+    raise ImportError("*pyopentrep* raised ImportError.")
 
 
 # Default settings
-DEFAULT_DB  = '/tmp/opentrep/traveldb'
+DEFAULT_DB  = '/tmp/opentrep/xapian_traveldb'
 DEFAULT_FMT = 'S'
 DEFAULT_LOG = '/dev/null'
 
@@ -57,9 +57,13 @@ class OpenTrepLib(object):
             print('/!\ Directory %s did not exist, creating...\n' % xapianDBPath)
             mkdir_p(xapianDBPath)
 
-        self._trep_lib = libpyopentrep.OpenTrepSearcher()
+        self._trep_lib = pyopentrep.OpenTrepSearcher ()
 
-        initOK = self._trep_lib.init(xapianDBPath, logFilePath)
+        sqlDBType = 'nodb'
+        sqlDBConnStr = ''
+        deploymentNumber = 0
+        initOK = self._trep_lib.init (xapianDBPath, sqlDBType, sqlDBConnStr,
+                                      deploymentNumber, logFilePath)
 
         if not initOK:
             raise Exception('The OpenTrep library cannot be initialised.')

@@ -8,6 +8,7 @@ dist
 *.pid
 *.sw[po]
 # Ignoring virtualenv
+.Python
 bin/
 lib/
 lib64
