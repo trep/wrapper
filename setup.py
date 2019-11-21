@@ -9,7 +9,7 @@ from setuptools import setup
 
 setup(
     name = 'OpenTrepWrapper',
-    version = '0.07.4-1',
+    version = '0.7.4.post1',
     author = 'Alex Prengere',
     author_email = 'alex.prengere@gmail.com',
     url = 'https://github.com/trep/wrapper',
