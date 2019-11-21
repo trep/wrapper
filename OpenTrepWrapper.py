@@ -4,11 +4,21 @@
 '''
 This module is an OpenTrep binding.
 
-    >>> with OpenTrepLib() as otp:
-    ...     otp.search('sna francsico los angeles')
-    ([(0.039..., 'SFO'), (0.462..., 'LAX')], '')
-'''
+ >>> from OpenTrepWrapper import main_trep, index_trep
+ >>> from OpenTrepWrapper import DEFAULT_LOG, DEFAULT_FMT, DEFAULT_DB
+ 
+ >>> index_trep (xapianDBPath = '/tmp/opentrep/xapian_traveldb', \
+                 logFilePath = '/tmp/opentrep/opeentrep-indexer.log', \
+                 verbose = False)
 
+ >>> main_trep (searchString = 'nce sfo', \
+                outputFormat = 'S', \
+                xapianDBPath = '/tmp/opentrep/xapian_traveldb', \
+                logFilePath = '/tmp/opentrep/opeentrep-searcher.log', \
+                verbose = False)
+ ([(89.8466, 'NCE'), (357.45599999999996, 'SFO')], '')
+
+'''
 
 from __future__ import with_statement
 
@@ -42,8 +52,10 @@ class OpenTrepLib(object):
     This class wraps the methods of the C++ OpenTrepSearcher class.
 
     >>> otp = OpenTrepLib(DEFAULT_DB, DEFAULT_LOG)
-    >>> otp.search('sna francsico los angeles', DEFAULT_FMT)
-    ([(0.039..., 'SFO'), (0.462..., 'LAX')], '')
+
+    >>> otp.search('san francsico los angeles', DEFAULT_FMT)
+    ([(0.32496, 'SFO'), (0.5450269999999999, 'LAX')], '')
+
     >>> otp.finalize()
     '''
 
@@ -54,7 +66,7 @@ class OpenTrepLib(object):
             # it probably means that the database has
             # never been created
             # First we create the path to avoid failure next
-            print('/!\ Directory %s did not exist, creating...\n' % xapianDBPath)
+            print('/!\ Directory {} did not exist, creating...\n'.format(xapianDBPath))
             mkdir_p(xapianDBPath)
 
         self._trep_lib = pyopentrep.OpenTrepSearcher ()
@@ -62,17 +74,19 @@ class OpenTrepLib(object):
         sqlDBType = 'nodb'
         sqlDBConnStr = ''
         deploymentNumber = 0
+        xapianDBActualPath = xapianDBPath + str(deploymentNumber)
         initOK = self._trep_lib.init (xapianDBPath, sqlDBType, sqlDBConnStr,
                                       deploymentNumber, logFilePath)
 
         if not initOK:
-            raise Exception('The OpenTrep library cannot be initialised.')
+            msgStr = 'Xapian index: {}; SQL DB type: {}; Deployment: {}; log file: {}'.format (xapianDBPath, sqlDBType, deploymentNumber, logFilePath)
+            raise Exception('The OpenTrep library cannot be initialised - {}'.format(msgStr))
 
-        if not os.listdir(xapianDBPath):
-            # Here is means that the xapianDBPath is empty,
-            # this is the case if the base has never been indexed.
-            # So we index the base now
-            print('/!\ %s seems to be empty, forcing indexation now...\n' % xapianDBPath)
+        if not os.listdir(xapianDBActualPath):
+            # Here it seems that the xapianDBPath is empty,
+            # this is the case if the POR data file has not been indexed yeet.
+            # So we index the POR data file now with Xapian.
+            print('/!\ {} seems to be empty, forcing indexation now...\n'.format(xapianDBPath))
             self.index(verbose=True)
 
 
@@ -329,7 +343,8 @@ def jsonResultParser(resultString):
 
 
 def mkdir_p(path):
-    '''mkdir -p behavior.
+    '''
+    mkdir -p behavior.
     '''
     try:
         os.makedirs(path)
@@ -340,31 +355,34 @@ def mkdir_p(path):
             raise
 
 
-def index_trep(xapianDBPath=DEFAULT_DB, logFilePath=DEFAULT_LOG, verbose=True):
+def index_trep (xapianDBPath = DEFAULT_DB,
+                logFilePath = DEFAULT_LOG,
+                verbose=False):
     '''
     Instanciate the OpenTrepLib object and index.
     '''
     with OpenTrepLib(xapianDBPath, logFilePath) as otp:
-
         otp.index(verbose)
 
 
-
-def main_trep(searchString,
-              outputFormat=DEFAULT_FMT,
-              xapianDBPath=DEFAULT_DB,
-              logFilePath=DEFAULT_LOG,
-              verbose=False):
+def main_trep (searchString,
+               outputFormat = DEFAULT_FMT,
+               xapianDBPath = DEFAULT_DB,
+               logFilePath = DEFAULT_LOG,
+               verbose = False):
     '''
     Instanciate the OpenTrepLib object and search from it.
 
-    >>> main_trep('sna francisco')
-    ([(0.315..., 'SFO')], '')
+    >>> main_trep (searchString = 'san francisco', \
+                   outputFormat = 'S', \
+                   xapianDBPath = '/tmp/opentrep/xapian_traveldb', \
+                   logFilePath = '/tmp/opentrep/opeentrep-searcher.log', \
+                   verbose = False)
+    ([(0.32496, 'SFO')], '')
+
     '''
     with OpenTrepLib(xapianDBPath, logFilePath) as otp:
-
         return otp.search(searchString, outputFormat, verbose)
-
 
 
 def _test():

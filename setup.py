@@ -9,7 +9,7 @@ from setuptools import setup
 
 setup(
     name = 'OpenTrepWrapper',
-    version = '0.7',
+    version = '0.07.4-1',
     author = 'Alex Prengere',
     author_email = 'alex.prengere@gmail.com',
     url = 'https://github.com/trep/wrapper',
@@ -29,3 +29,4 @@ setup(
     ],
     #sanitize_lib = ['-lasan'] if cc == 'gcc' and not is_macos else [],
 )
+
