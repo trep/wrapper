@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name = 'OpenTrepWrapper',
-    version = '0.7.4.post4',
+    version = '0.7.5.post1',
     author = 'Alex Prengere',
     author_email = 'alex.prengere@gmail.com',
     url = 'https://github.com/trep/wrapper',

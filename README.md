@@ -6,6 +6,7 @@ OpenTrepWrapper
 * This GitHub project: https://github.com/trep/wrapper
 * OpenTravelData (OPTD) project: https://github.com/opentraveldata/opentraveldata
 * [How to install `pyenv` and `pipenv`](https://github.com/machine-learning-helpers/induction-python/tree/master/installation/virtual-env)
+* [Twine utility](https://github.com/pypa/twine)
 
 # Configuration
 
@@ -33,8 +34,8 @@ $ export PATH="${TREP_DIR}/bin:${PATH}"
 ## Installation of `pyenv` and `pipenv`
 * Install Python:
 ```bash
-$ pyenv install 3.7.4
-$ pyenv global 3.7.4 && pip install -U pip pipenv && pyenv global system
+$ pyenv install 3.8.2
+$ pyenv global 3.8.2 && pip install -U pip pipenv && pyenv global system
 ```
 
 * Clone this Git repository:
@@ -59,7 +60,7 @@ $ pipenv run python
 ```bash
 $ ASAN_OPTIONS=detect_container_overflow=0 \
  DYLD_INSERT_LIBRARIES=/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.asan_osx_dynamic.dylib \
- /usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python
+ /usr/local/Cellar/python/3.7.6_1/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python
 ```
 
 * Import the module:
@@ -96,7 +97,7 @@ $ ASAN_OPTIONS=detect_container_overflow=0 \
 ```bash
 $ ASAN_OPTIONS=detect_container_overflow=0 \
  DYLD_INSERT_LIBRARIES=/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.asan_osx_dynamic.dylib \
- /usr/local/Cellar/python/3.7.5/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python  test.py 
+ /usr/local/Cellar/python/3.7.6_1/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python test.py
 ......
 ----------------------------------------------------------------------
 Ran 6 tests in 2.832s
@@ -110,15 +111,15 @@ OK
 $ rm -rf dist && mkdir dist
 $ pipenv run python setup.py sdist bdist_wheel bdist_egg
 $ ls -lFh dist
-total 48
--rw-r--r--  1 user  staff   7.1K Nov 22 01:03 OpenTrepWrapper-0.7.4.post3-py3-none-any.whl
--rw-r--r--  1 user  staff   6.7K Nov 22 01:03 OpenTrepWrapper-0.7.4.post3-py3.7.egg
--rw-r--r--  1 user  staff   6.2K Nov 22 01:03 OpenTrepWrapper-0.7.4.post3.tar.gz
+total 56
+-rw-r--r--  1 user  staff   7.7K Mar  2 11:14 OpenTrepWrapper-0.7.5.post1-py3-none-any.whl
+-rw-r--r--  1 user  staff   7.3K Mar  2 11:14 OpenTrepWrapper-0.7.5.post1-py3.8.egg
+-rw-r--r--  1 user  staff   8.4K Mar  2 11:14 OpenTrepWrapper-0.7.5.post1.tar.gz
 ```
 
 * Publish to PyPi:
 ```bash
-$ pipenv run twine upload dist/*
+$ pipenv run twine upload -u __token__ dist/*
 ```
 
 
