@@ -54,13 +54,21 @@ $ pipenv install && pipenv install --dev
   Python Shell has been launched:
 ```bash
 $ pipenv run python
+Python 3.8.2 (default, Mar  1 2020, 10:21:42) 
+[Clang 11.0.0 (clang-1100.0.33.8)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> quit()
 ```
 
 * Or, on MacOS:
 ```bash
 $ ASAN_OPTIONS=detect_container_overflow=0 \
  DYLD_INSERT_LIBRARIES=/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.asan_osx_dynamic.dylib \
- /usr/local/Cellar/python/3.7.6_1/Frameworks/Python.framework/Versions/3.7/Resources/Python.app/Contents/MacOS/Python
+ /usr/local/Cellar/python\@3.8/3.8.2/Frameworks/Python.framework/Versions/3.8/Resources/Python.app/Contents/MacOS/Python
+Python 3.8.2 (default, Mar 11 2020, 00:29:50) 
+[Clang 11.0.0 (clang-1100.0.33.17)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> quit()
 ```
 
 * Import the module:
