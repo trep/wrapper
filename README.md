@@ -4,6 +4,7 @@ OpenTrepWrapper
 # Refefences
 * OpenTREP project: https://github.com/trep/opentrep
 * This GitHub project: https://github.com/trep/wrapper
+* PyPi artifacts: https://pypi.org/project/OpenTrepWrapper/
 * OpenTravelData (OPTD) project: https://github.com/opentraveldata/opentraveldata
 * [How to install `pyenv` and `pipenv`](https://github.com/machine-learning-helpers/induction-python/tree/master/installation/virtual-env)
 * [Twine utility](https://github.com/pypa/twine)
