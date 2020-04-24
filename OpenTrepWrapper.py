@@ -333,7 +333,7 @@ def jsonResultParser(resultString):
             loc['icao_code'],
             loc['geonames_id'],
             '%.2f%%' % float(loc['page_rank']),
-            loc['city_code'],
+            loc['cities']['city_details']['iata_code'],
             '%.2f' % float(loc['lat']),
             '%.2f' % float(loc['lon'])
         ])
