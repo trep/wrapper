@@ -5,9 +5,10 @@
 This module is an OpenTrep binding.
 
  >>> from OpenTrepWrapper import main_trep, index_trep
- >>> from OpenTrepWrapper import DEFAULT_LOG, DEFAULT_FMT, DEFAULT_DB
+ >>> from OpenTrepWrapper import DEFAULT_LOG, DEFAULT_FMT, DEFAULT_IDX, DEFAULT_POR
  
- >>> index_trep (xapianDBPath = '/tmp/opentrep/xapian_traveldb', \
+ >>> index_trep (porPath = '/tmp/opentraveldata/optd_por_public_all.csv', \
+                 xapianDBPath = '/tmp/opentrep/xapian_traveldb', \
                  logFilePath = '/tmp/opentrep/opeentrep-indexer.log', \
                  verbose = False)
 
@@ -39,9 +40,13 @@ except ImportError:
 
 
 # Default settings
-DEFAULT_DB  = '/tmp/opentrep/xapian_traveldb'
+DEFAULT_POR = '/tmp/opentraveldata/optd_por_public.csv'
+DEFAULT_IDX = '/tmp/opentrep/xapian_traveldb'
 DEFAULT_FMT = 'S'
-DEFAULT_LOG = '/dev/null'
+DEFAULT_LOG = '/tmp/opentrep/opentrepwrapper.log'
+FLAG_INDEX_NON_IATA_POR = False
+FLAG_INIT_XAPIAN = True
+FLAG_ADD_POR_TO_DB = True
 
 AVAILABLE_FORMATS = set(['I', 'J', 'F', 'S'])
 
@@ -51,7 +56,7 @@ class OpenTrepLib(object):
     '''
     This class wraps the methods of the C++ OpenTrepSearcher class.
 
-    >>> otp = OpenTrepLib(DEFAULT_DB, DEFAULT_LOG)
+    >>> otp = OpenTrepLib(DEFAULT_POR, DEFAULT_IDX, DEFAULT_LOG)
 
     >>> otp.search('san francsico los angeles', DEFAULT_FMT)
     ([(0.32496, 'SFO'), (0.5450269999999999, 'LAX')], '')
@@ -59,7 +64,7 @@ class OpenTrepLib(object):
     >>> otp.finalize()
     '''
 
-    def __init__(self, xapianDBPath=DEFAULT_DB, logFilePath=DEFAULT_LOG):
+    def __init__(self, porPath=DEFAULT_POR, xapianDBPath=DEFAULT_IDX, logFilePath=DEFAULT_LOG):
 
         if not os.path.isdir(xapianDBPath):
             # If xapianDBPath is not a directory,
@@ -71,12 +76,16 @@ class OpenTrepLib(object):
 
         self._trep_lib = pyopentrep.OpenTrepSearcher ()
 
+        # sqlDBType = 'sqlite'
+        # sqlDBConnStr = '/tmp/opentrep/sqlite_travel.db'
         sqlDBType = 'nodb'
         sqlDBConnStr = ''
         deploymentNumber = 0
         xapianDBActualPath = xapianDBPath + str(deploymentNumber)
-        initOK = self._trep_lib.init (xapianDBPath, sqlDBType, sqlDBConnStr,
-                                      deploymentNumber, logFilePath)
+        initOK = self._trep_lib.init (porPath, xapianDBPath,
+                sqlDBType, sqlDBConnStr,
+                deploymentNumber, FLAG_INDEX_NON_IATA_POR,
+                FLAG_INIT_XAPIAN, FLAG_ADD_POR_TO_DB, logFilePath)
 
         if not initOK:
             msgStr = 'Xapian index: {}; SQL DB type: {}; Deployment: {}; log file: {}'.format (xapianDBPath, sqlDBType, deploymentNumber, logFilePath)
@@ -208,9 +217,9 @@ def compactResultParser(resultString):
 
     Samples of result string to be parsed:
 
-     % pyopentrep -f S nice sna francisco vancouver niznayou
+     % python3 pyopentrep.py -f S nice sna francisco vancouver niznayou
      'nce/100,sfo/100-emb/98-jcc/97,yvr/100-cxh/83-xea/83-ydt/83;niznayou'
-     % pyopentrep -f S fr
+     % python3 pyopentrep.py -f S fr
      'aur:avf:bae:bou:chr:cmf:cqf:csf:cvf:dij/100'
 
     >>> test_1 = 'nce/100,sfo/100-emb/98-jcc/97,yvr/100-cxh/83-xea/83-ydt/83;niznayou'
@@ -271,7 +280,7 @@ def jsonResultParser(resultString):
 
     Samples of result string to be parsed:
 
-     - pyopentrep -f J nice sna francisco
+     - python3 pyopentrep.py -f J nice sna francisco
        - {'locations':[
             {'names':[
                {'name': 'nice'}, {'name': 'nice/fr:cote d azur'}],
@@ -291,7 +300,7 @@ def jsonResultParser(resultString):
             ]}
          ]}
 
-     - pyopentrep -f J fr
+     - python3 pyopentrep.py -f J fr
        - {'locations':[
             {'names':[
                {'name': 'aurillac'}, {'name': 'aurillac/fr'}],
@@ -355,19 +364,20 @@ def mkdir_p(path):
             raise
 
 
-def index_trep (xapianDBPath = DEFAULT_DB,
+def index_trep (porPath = DEFAULT_POR,
+                xapianDBPath = DEFAULT_IDX,
                 logFilePath = DEFAULT_LOG,
                 verbose=False):
     '''
     Instanciate the OpenTrepLib object and index.
     '''
-    with OpenTrepLib(xapianDBPath, logFilePath) as otp:
+    with OpenTrepLib(porPath, xapianDBPath, logFilePath) as otp:
         otp.index(verbose)
 
 
 def main_trep (searchString,
                outputFormat = DEFAULT_FMT,
-               xapianDBPath = DEFAULT_DB,
+               xapianDBPath = DEFAULT_IDX,
                logFilePath = DEFAULT_LOG,
                verbose = False):
     '''
@@ -381,7 +391,7 @@ def main_trep (searchString,
     ([(0.32496, 'SFO')], '')
 
     '''
-    with OpenTrepLib(xapianDBPath, logFilePath) as otp:
+    with OpenTrepLib(DEFAULT_POR, xapianDBPath, logFilePath) as otp:
         return otp.search(searchString, outputFormat, verbose)
 
 
