@@ -5,11 +5,14 @@ verify_ssl = true
 
 [dev-packages]
 setuptools = "*"
+wheel = "*"
 twine = "*"
 keyring = "*"
 pytest = "*"
+tox = "*"
 
 [packages]
+opentraveldata = "*"
 
 [requires]
 python_version = "3.8"
