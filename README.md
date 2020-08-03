@@ -6,8 +6,9 @@ OpenTrepWrapper
 
 # Overview
 [OpenTREP](https://github.com/trep/opentrep) aims at providing a clean API,
-and the corresponding C++ implementation, for parsing travel-/transport-focused
-requests. It powers the https://transport-search.org Web site (as well
+its corresponding C++ implementation and Python extension, for parsing
+travel-/transport-focused requests. It powers the
+https://transport-search.org Web site (as well
 as its newer version, https://www2.transport-search.org).
 
 As part of the [OpenTREP releases](https://github.com/trep/opentrep/releases),
@@ -53,7 +54,8 @@ $ pyenv install 3.8.5 && pyenv global 3.8.5 && \
 
 * Clone this Git repository:
 ```bash
-$ mkdir -p ~/dev/geo/trep && git clone https://github.com/trep/wrapper.git ~/dev/geo/trep-wrapper
+$ mkdir -p ~/dev/geo/trep && \
+  git clone https://github.com/trep/wrapper.git ~/dev/geo/trep-wrapper
 ```
 
 * Install the Python virtual environment:
@@ -164,10 +166,11 @@ $ export DYLD_LIBRARY_PATH=/usr/local/lib
 >>> myOPTD.downloadFilesIfNeeded()
 >>> myOPTD
 OpenTravelData:
-        Local IATA/ICAO POR file: /tmp/opentraveldata/optd_por_public_all.csv
-        Local UN/LOCODE POR file: /tmp/opentraveldata/optd_por_unlc.csv
+	Local IATA/ICAO POR file: /tmp/opentraveldata/optd_por_public_all.csv
+	Local UN/LOCODE POR file: /tmp/opentraveldata/optd_por_unlc.csv
 >>> myOPTD.fileSizes()
-(44044195, 4888086)
+(44079255, 4888752)
+>>> 
 ```
 
 * Initialize the Xapian index with the `-i` option of `pyopentrep.py`,
@@ -234,21 +237,77 @@ Python 3.8.5 (default, Jul 24 2020, 13:35:18)
 >>> 
 ```
 
-* Import the module:
+* Import the module and initialize the Python extension:
 ```python
->>> from OpenTrepWrapper import main_trep, index_trep
->>> from OpenTrepWrapper import DEFAULT_LOG, DEFAULT_FMT, DEFAULT_DB
+>>> import OpenTrepWrapper
+>>> otp = OpenTrepWrapper.OpenTrepLib()
+>>> otp.init_cpp_extension(por_path=None,
+                           xapian_index_path="/tmp/opentrep/xapian_traveldb",
+                           sql_db_type="nodb",
+                           sql_db_conn_str=None,
+                           deployment_nb=0,
+                           log_path="test_OpenTrepWrapper.log",
+                           log_level=5)
+>>>
 ```
 
 * Index the OPTD data file:
 ```python
->>> index_trep (xapianDBPath = '/tmp/opentrep/xapian_traveldb', logFilePath = '/tmp/opentrep/opeentrep-indexer.log', verbose = False)
+>>> otp.index()
 ```
 
-* Search:
+* Search
+  + Short output format:
 ```python
->>> main_trep (searchString = 'nce sfo', outputFormat = 'S',  xapianDBPath = '/tmp/opentrep/xapian_traveldb',  logFilePath = '/tmp/opentrep/opeentrep-searcher.log',  verbose = False)
- ([(89.8466, 'NCE'), (357.45599999999996, 'SFO')], '')
+>>> otp.search(search_string="nce sfo", outputFormat="S")
+([(89.8466, 'NCE'), (357.45599999999996, 'SFO')], '')
+------------------
+```
+  + Full output format:
+```python
+>>> otp.search(search_string="nce sfo", outputFormat="F")
+search_string: nce sfo
+Raw result from the OpenTrep library:
+1. NCE-A-6299418, 8.16788%, Nice Côte d'Azur International Airport, Nice Cote d'Azur International Airport, LFMN, , FRNCE, , 0, 1970-Jan-01, 2999-Dec-31, , NCE|2990440|Nice|Nice|FR|PAC, PAC, FR, , France, 427, France, EUR, NA, Europe, 43.6584, 7.21587, S, AIRP, 93, Provence-Alpes-Côte d'Azur, Provence-Alpes-Cote d'Azur, 06, Alpes-Maritimes, Alpes-Maritimes, 062, 06088, 0, 3, 5, Europe/Paris, 1, 2, 1, 2018-Dec-05, , https://en.wikipedia.org/wiki/Nice_C%C3%B4te_d%27Azur_Airport, 43.6627, 7.20787, nce, nce, 8984.66%, 0, 0
+2. SFO-C-5391959, 32.496%, San Francisco, San Francisco, , , USSFO, , 0, 1970-Jan-01, 2999-Dec-31, , SFO|5391959|San Francisco|San Francisco|US|CA, CA, US, , United States, 91, California, USD, NA, North America, 37.7749, -122.419, P, PPLA2, CA, California, California, 075, City and County of San Francisco, City and County of San Francisco, Z, , 864816, 16, 28, America/Los_Angeles, -8, -7, -8, 2019-Sep-05, SFO, https://en.wikipedia.org/wiki/San_Francisco, 0, 0, sfo, sfo, 35745.6%, 0, 0
+
+------------------
+```
+  + JSON output format:
+```python
+>>> otp.search(search_string="nce sfo", outputFormat="J")
+search_string: nce sfo
+Raw (JSON) result from the OpenTrep library:
+{
+    "locations": [
+        {
+            "iata_code": "NCE",
+            "icao_code": "LFMN",
+            "geonames_id": "6299418",
+            "feature_class": "S",
+            "feature_code": "AIRP",
+            ...
+        },
+        {
+            "iata_code": "SFO",
+            "icao_code": "",
+            "geonames_id": "5391959",
+            "feature_class": "P",
+            "feature_code": "PPLA2",
+            ...
+        }
+    ]
+}
+
+------------------
+```
+  + Interpreted format from JSON:
+```python
+>>> otp.search(search_string="nce sfo", outputFormat="I")
+search_string: nce sfo
+JSON format => recognised place (city/airport) codes:
+NCE-LFMN-6299418 (8.1678768123135352%) / NCE: 43.658411000000001 7.2158720000000001; SFO--5391959 (32.496021550940505%) / SFO: 37.774929999999998 -122.41942; 
+------------------
 ```
 
 * End the Python session:
@@ -260,19 +319,22 @@ Python 3.8.5 (default, Jul 24 2020, 13:35:18)
 ```bash
 $ ASAN_OPTIONS=detect_container_overflow=0 \
  DYLD_INSERT_LIBRARIES=/Library/Developer/CommandLineTools/usr/lib/clang/11.0.0/lib/darwin/libclang_rt.asan_osx_dynamic.dylib \
- /usr/local/Cellar/python\@3.8/3.8.5/Frameworks/Python.framework/Versions/3.8/Resources/Python.app/Contents/MacOS/Python test.py
-......
-----------------------------------------------------------------------
-Ran 6 tests in 2.832s
+ /usr/local/Cellar/python\@3.8/3.8.5/Frameworks/Python.framework/Versions/3.8/Resources/Python.app/Contents/MacOS/Python -mpytest test_OpenTrepWrapper.py
+====================== test session starts =====================
+platform darwin -- Python 3.8.5, pytest-5.4.3, py-1.8.1, pluggy-0.13.1
+rootdir: /Users/darnaud/dev/geo/trep-wrapper
+plugins: dash-1.12.0
+collected 3 items
+test_OpenTrepWrapper.py ...    [100%]
 
-OK
+====================== 3 passed in 1.35s =======================
 ```
 
 # Release OpenTrepWrapper to PyPi
 * Build the Python artifacts for OpenTrepWrapper:
 ```bash
-$ rm -rf dist && mkdir dist
-$ pipenv run python setup.py sdist bdist_wheel bdist_egg
+$ rm -rf dist build */*.egg-info *.egg-info .tox MANIFEST
+$ pipenv run python setup.py sdist bdist_wheel
 $ ls -lFh dist
 total 56
 -rw-r--r--  1 user  staff   7.7K Mar  2 11:14 OpenTrepWrapper-0.7.7.post1-py3-none-any.whl

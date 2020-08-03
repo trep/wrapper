@@ -1,14 +1,10 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 '''
 This module is the OpenTrep binding main script.
 '''
 
-from OpenTrepWrapper import main_trep, index_trep
-from OpenTrepWrapper import DEFAULT_LOG, DEFAULT_FMT, DEFAULT_DB
-
-
+import OpenTrepWrapper
 
 def main():
     '''
@@ -30,20 +26,20 @@ def main():
     parser.add_argument('-f', '--format',
         help = '''Choose a different format.
                         Must be either F, S, J, I.
-                        Default is "%s"''' % DEFAULT_FMT,
-        default = DEFAULT_FMT
+                        Default is "%s"''' % OpenTrepWrapper.DEFAULT_FMT,
+        default = OpenTrepWrapper.DEFAULT_FMT
     )
 
     parser.add_argument('-x', '--xapiandb',
         help = '''Specify the xapian db location.
-                        Default is "%s"''' % DEFAULT_DB,
-        default = DEFAULT_DB
+                        Default is "%s"''' % OpenTrepWrapper.DEFAULT_DB,
+        default = OpenTrepWrapper.DEFAULT_DB
     )
 
     parser.add_argument('-l', '--log',
         help = '''Specify a log file. 
-                        Default is "%s"''' % DEFAULT_LOG,
-        default = DEFAULT_LOG
+                        Default is "%s"''' % OpenTrepWrapper.DEFAULT_LOG,
+        default = OpenTrepWrapper.DEFAULT_LOG
     )
 
     parser.add_argument('-q', '--quiet',
@@ -58,20 +54,21 @@ def main():
 
     args = vars(parser.parse_args())
 
+    ot = OpenTrepWrapper()
+
     if args['index']:
 
-        index_trep(xapianDBPath=args['xapiandb'],
-                   logFilePath=args['log'],
-                   verbose=not(args['quiet']))
+        ot.index_trep(xapianDBPath=args['xapiandb'],
+                      logFilePath=args['log'],
+                      verbose=not(args['quiet']))
 
         exit()
 
-    main_trep(searchString=' '.join(args['keys']),
-              outputFormat=args['format'],
-              xapianDBPath=args['xapiandb'],
-              logFilePath=args['log'],
-              verbose=not(args['quiet']))
-
+    ot.main_trep(searchString=' '.join(args['keys']),
+                 outputFormat=args['format'],
+                 xapianDBPath=args['xapiandb'],
+                 logFilePath=args['log'],
+                 verbose=not(args['quiet']))
 
 
 if __name__ == '__main__':

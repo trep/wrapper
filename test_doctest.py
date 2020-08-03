@@ -1,5 +1,9 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
+#
+# Source: https://github.com/trep/wrapper/tree/master/test_doctest.py
+#
+# Authors: Alex Prengere, Denis Arnaud
+#
 
 import unittest
 import doctest
