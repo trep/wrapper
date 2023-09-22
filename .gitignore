@@ -1,3 +1,5 @@
+.python-version
+Pipfile.lock
 *pyc
 .settings
 .project

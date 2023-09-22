@@ -1,0 +1,33 @@
+[project]
+name = "OpenTrepWrapper"
+description = "A Python wrapper module for OpenTrep"
+version = "0.7.7.post3"
+authors = [
+    { name = "Denis Arnaud", email = "denis.arnaud_fedora@m4x.org" }
+]
+readme = "README.md"
+keywords = [
+        "data", "trep", "request", "parser", "travel", "transport",
+        "search", "wrapper", "optd", "opentraveldata", "opentrep"
+]
+classifiers = [
+        # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: POSIX",
+        "Programming Language :: Python :: 3",
+        "Topic :: Utilities",
+]
+
+[project.urls]
+documentation = "https://opentrep.readthedocs.io/en/latest/"
+changelog = "https://opentrep.readthedocs.io/en/latest/opentrep.html"
+
+[tool.setuptools]
+packages = ["OpenTrepWrapper"]
+
+# Requirements
+[dependencies]
+datetime = "*"
+
